@@ -1,0 +1,25 @@
+name: Deploy newsbot
+on:
+  push:
+    branches: [ main ]
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: appleboy/ssh-action@v1.0.0
+        with:
+          host: ${{ secrets.ORACLE_HOST }}
+          username: ubuntu
+          key: ${{ secrets.ORACLE_SSH_KEY }}
+          script: |
+            cd ~/lazy_NewsReporterBot
+            git pull
+            cat > .env << EOF
+            TELEGRAM_BOT_TOKEN=${{ secrets.TELEGRAM_BOT_TOKEN }}
+            TELEGRAM_CHAT_ID=${{ secrets.TELEGRAM_CHAT_ID }}
+            GEMINI_API_KEY=${{ secrets.GEMINI_API_KEY }}
+            EOF
+            source venv/bin/activate
+            pip install -q -r requirements.txt
+            # TEMPORARY smoke test, remove after first success:
+            set -a; source .env; set +a; python main.py
