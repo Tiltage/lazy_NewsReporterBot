@@ -21,5 +21,3 @@ jobs:
             EOF
             source venv/bin/activate
             pip install -q -r requirements.txt
-            # TEMPORARY smoke test, remove after first success:
-            set -a; source .env; set +a; python main.py
