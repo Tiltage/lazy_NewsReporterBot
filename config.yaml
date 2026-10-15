@@ -1,0 +1,54 @@
+# Tracked in git (public repo): no secrets here.
+#
+# Feed URLs below are written from memory and are UNVERIFIED. Run
+#     python newsbot/explore.py --check
+# and delete or replace anything that shows FAIL, goes stale, or has snip_med near 0.
+# Per-source overrides: cap (max items per run), max_age_hours (slow blogs need a long window;
+# the seen-URL store stops anything from repeating once it has been sent).
+
+filters:
+  max_age_hours: 36
+  per_source_cap: 6
+  snippet_chars: 200
+  max_candidates: 60          # only used to split evenly if section_quota is omitted
+  exclude_keywords: []
+  section_quota: { AI: 24, Crypto: 14, Finance: 22 }    # also sets section order in the digest
+
+sources:
+  # ---------------- AI: depth (research labs, practitioners; slow cadence => long windows)
+  - { name: "Google DeepMind",       url: "https://deepmind.google/blog/rss.xml",                        section: AI, max_age_hours: 168, cap: 3 }
+  - { name: "OpenAI",                url: "https://openai.com/news/rss.xml",                             section: AI, max_age_hours: 168, cap: 3 }
+  - { name: "Hugging Face Blog",     url: "https://huggingface.co/blog/feed.xml",                        section: AI, max_age_hours: 168, cap: 3 }
+  - { name: "BAIR Blog",             url: "https://bair.berkeley.edu/blog/feed.xml",                     section: AI, max_age_hours: 720, cap: 2 }
+  - { name: "Import AI",             url: "https://importai.substack.com/feed",                          section: AI, max_age_hours: 200, cap: 2 }
+  - { name: "Simon Willison",        url: "https://simonwillison.net/atom/everything/",                  section: AI, max_age_hours: 72,  cap: 3 }
+  - { name: "MIT Tech Review AI",    url: "https://www.technologyreview.com/topic/artificial-intelligence/feed", section: AI, max_age_hours: 72, cap: 4 }
+  # ---------------- AI: news flow
+  - { name: "Ars Technica AI",       url: "https://arstechnica.com/ai/feed/",                            section: AI }
+  - { name: "TechCrunch AI",         url: "https://techcrunch.com/category/artificial-intelligence/feed/", section: AI }
+  - { name: "VentureBeat AI",        url: "https://venturebeat.com/category/ai/feed/",                   section: AI }
+  - { name: "The Verge AI",          url: "https://www.theverge.com/rss/ai-artificial-intelligence/index.xml", section: AI }
+  - { name: "HN: LLM (100+ pts)",    url: "https://hnrss.org/newest?q=LLM&points=100",                   section: AI, cap: 4 }
+
+  # ---------------- Crypto
+  - { name: "CoinDesk",              url: "https://www.coindesk.com/arc/outboundfeeds/rss/",             section: Crypto }
+  - { name: "Cointelegraph",         url: "https://cointelegraph.com/rss",                               section: Crypto }
+  - { name: "The Block",             url: "https://www.theblock.co/rss.xml",                             section: Crypto }
+  - { name: "Decrypt",               url: "https://decrypt.co/feed",                                     section: Crypto }
+  - { name: "Bitcoin Magazine",      url: "https://bitcoinmagazine.com/.rss/full/",                      section: Crypto, cap: 3 }
+
+  # ---------------- Finance: US markets and economy
+  - { name: "CNBC Economy",          url: "https://www.cnbc.com/id/20910258/device/rss/rss.html",        section: Finance }
+  - { name: "CNBC Finance",          url: "https://www.cnbc.com/id/10000664/device/rss/rss.html",        section: Finance }
+  - { name: "CNBC Investing",        url: "https://www.cnbc.com/id/15839069/device/rss/rss.html",        section: Finance }
+  - { name: "MarketWatch",           url: "https://feeds.content.dowjones.io/public/rss/mw_topstories",  section: Finance }
+  - { name: "WSJ Markets",           url: "https://feeds.content.dowjones.io/public/rss/RSSMarketsMain", section: Finance }
+  - { name: "Yahoo Finance",         url: "https://finance.yahoo.com/news/rssindex",                     section: Finance }
+  - { name: "Federal Reserve",       url: "https://www.federalreserve.gov/feeds/press_all.xml",          section: Finance, max_age_hours: 168, cap: 3 }
+
+  # ---------------- Finance: Singapore / Southeast Asia
+  - { name: "CNA Business",          url: "https://www.channelnewsasia.com/api/v1/rss-outbound-feed?_format=xml&category=6511", section: Finance }
+  - { name: "Straits Times Business", url: "https://www.straitstimes.com/news/business/rss.xml",         section: Finance }
+  - { name: "Business Times",        url: "https://www.businesstimes.com.sg/rss/top-stories",            section: Finance }
+  - { name: "Nikkei Asia",           url: "https://asia.nikkei.com/rss/feed/nar",                        section: Finance, cap: 4 }
+  - { name: "CNBC Asia",             url: "https://www.cnbc.com/id/19832390/device/rss/rss.html",        section: Finance, cap: 4 }

@@ -1,4 +1,4 @@
 .env
 data/
-venv/
+lazy_newsbot/
 __pycache__/
